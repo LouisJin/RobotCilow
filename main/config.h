@@ -41,4 +41,8 @@ typedef enum {
 // 眨眼时间间隔(毫秒)
 #define EMOJI_BLINK_INTEVEL  10000
 
+//WIFI相关
+#define WIFI_SSID "LitMeng"
+#define WIFI_PASS "12345678"
+
 #endif

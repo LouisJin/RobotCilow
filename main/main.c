@@ -7,6 +7,8 @@
 #include "lvgl_api.h"
 #include "d_lcd.h"
 #include "d_servo.h"
+#include "d_wifi.h"
+#include "nvs_flash.h"
 
 static const char *TAG = "APP";
 
@@ -29,15 +31,30 @@ void spiffs_init() {
     ESP_LOGI(TAG, "SPIFFS initialized successfully");
 }
 
+/**
+ * nvs初始化
+ */
+ void nvs_init() {
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        ret = nvs_flash_init();
+    }
+    ESP_ERROR_CHECK(ret);
+ }
 
 void app_main(void) {
     ESP_LOGI(TAG, "Starting Robot Cilow Application");
+    // 初始化nvs
+    nvs_init();
+    // 初始化spiffs
+    spiffs_init();
+    // 初始化wifi
+    wifi_init_sta();
     // 初始化显示相关
     lv_port_disp_init();
     // 初始化舵机
     servo_init();
-    // 初始化spiffs
-    spiffs_init();
     // 初始化表情
     emoji_init();
     // emoji();

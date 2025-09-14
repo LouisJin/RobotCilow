@@ -18,8 +18,6 @@
 #define LVGL_TASK_PRIORITY 2
 #define LVGL_DRAW_BUF_LINES 20
 
-// LVGL library is not thread-safe, this will call LVGL APIs from different tasks, so use a mutex to protect it
-static _lock_t lvgl_api_lock;
 
 static const char *TAG = "LCD";
 
@@ -49,9 +47,9 @@ void lvgl_port_task(void *arg)
   uint32_t time_till_next_ms = 0;
   while (1)
   {
-    _lock_acquire(&lvgl_api_lock);
+    lv_lock();
     time_till_next_ms = lv_timer_handler();
-    _lock_release(&lvgl_api_lock);
+    lv_unlock();
     // in case of triggering a task watch dog time out
     time_till_next_ms = MAX(time_till_next_ms, LVGL_TASK_MIN_DELAY_MS);
     // in case of lvgl display not ready yet
@@ -179,10 +177,7 @@ static void disp_flush(lv_display_t * disp_drv, const lv_area_t * area, uint8_t 
       // 计算像素数量
       uint32_t pixel_count = (x2 - x1 + 1) * (y2 - y1 + 1);
       // because SPI LCD is big-endian, we need to swap the RGB bytes order
-      // 仅在大区域交换字节，减少处理时间
-      if (pixel_count > 100) {
-          lv_draw_sw_rgb565_swap(px_map, pixel_count);
-      }
+      lv_draw_sw_rgb565_swap(px_map, pixel_count);
       esp_lcd_panel_handle_t panel_handle = lv_display_get_user_data(disp_drv);
       // copy a buffer's content to a specific area of the display
       esp_lcd_panel_draw_bitmap(panel_handle, x1, y1, x2 + 1, y2 + 1, px_map);

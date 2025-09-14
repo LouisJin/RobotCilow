@@ -128,10 +128,12 @@ void play_gif_seq(gif_seq_t* gif_seq) {
     disp_enable_update();
     ESP_LOGI(TAG, "Playing emoji sequence index: %d, path: %s", gif_seq->seq_index, gif_seq->seq_path[gif_seq->seq_index]);
     
+    lv_lock();
     emoji_gif = lv_gif_create(lv_screen_active());
     lv_gif_set_src(emoji_gif, gif_seq->seq_path[gif_seq->seq_index]);
     lv_gif_set_loop_count(emoji_gif, 1); // 设置只播放一次
     lv_obj_center(emoji_gif);
+    lv_unlock();
     lv_obj_add_event_cb(emoji_gif, gif_playback_complete_cb, LV_EVENT_ALL, gif_seq);
 }
 
