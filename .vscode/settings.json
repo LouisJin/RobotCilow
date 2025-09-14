@@ -1,0 +1,58 @@
+{
+  "C_Cpp.intelliSenseEngine": "default",
+  "idf.espIdfPath": "/home/cilow/esp/v5.5.1/esp-idf",
+  "idf.pythonInstallPath": "/usr/bin/python3",
+  "idf.openOcdConfigs": [
+    "board/esp32s3-builtin.cfg"
+  ],
+  "idf.port": "/dev/ttyACM0",
+  "idf.toolsPath": "/home/cilow/.espressif",
+  "idf.customExtraVars": {
+    "IDF_TARGET": "esp32s3"
+  },
+  "clangd.path": "/home/cilow/.espressif/tools/esp-clang/esp-19.1.2_20250312/esp-clang/bin/clangd",
+  "clangd.arguments": [
+    "--background-index",
+    "--query-driver=/home/cilow/.espressif/tools/xtensa-esp-elf/esp-14.2.0_20241119/xtensa-esp-elf/bin/xtensa-esp32s3-elf-gcc",
+    "--compile-commands-dir=${workspaceFolder}/build"
+  ],
+  "files.associations": {
+    "lvgl.h": "c",
+    "spi_master.h": "c",
+    "gc9a01.h": "c",
+    "gpio.h": "c",
+    "esp_err.h": "c",
+    "esp_log.h": "c",
+    "esp_lcd_gc9a01.h": "c",
+    "stdio.h": "c",
+    "esp_lcd_panel_ops.h": "c",
+    "freertos.h": "c",
+    "lv_demo_widgets.h": "c",
+    "spi_types.h": "c",
+    "esp_intr_types.h": "c",
+    "param.h": "c",
+    "cstdio": "c",
+    "fstream": "c",
+    "lv_string.h": "c",
+    "lv_mem.h": "c",
+    "future": "c",
+    "system_error": "c",
+    "regex": "c",
+    "numbers": "c",
+    "config.h": "c",
+    "lv_port_disp_template.h": "c",
+    "lock.h": "c",
+    "esp_lcd_panel_io.h": "c",
+    "esp_timer.h": "c",
+    "cstdint": "c",
+    "bitset": "c",
+    "algorithm": "c",
+    "format": "c",
+    "task.h": "c",
+    "gifdec.h": "c",
+    "lv_fs.h": "c",
+    "ledc.h": "c",
+    "compare": "cpp"
+  },
+  "idf.flashType": "UART"
+}
