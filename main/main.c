@@ -51,7 +51,7 @@ void app_main(void) {
     // 初始化spiffs
     spiffs_init();
     // 初始化http
-    http_ap_init();
+    http_init();
     // 初始化显示相关
     lv_port_disp_init();
     // 初始化舵机

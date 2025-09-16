@@ -313,7 +313,8 @@ esp_err_t http_ap_init(void)
 }
 
 /*
- * 仅sta模式下的回调函数*/
+ * 第一次进入，默认sta模式
+ */
 void only_sta_status_callback(WIFI_STA_STATUS status) {
     if (status == WIFI_STA_CONNECTED) {
       ESP_LOGI(TAG,"http init finished");
