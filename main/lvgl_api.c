@@ -10,75 +10,75 @@ static const char *TAG = "lvgl_api";
 // emoji表情序列
 // 正常
 static char* EMOJI_NORMAL_SEQ_PATH[] = {
-    "S:/blink_once.gif", 
+    "S:/gif/blink_once.gif", 
     NULL
 };
 // 疑惑
 static char* EMOJI_DOUBT_SEQ_PATH[] = {
-    "S:/blink_twice.gif",
+    "S:/gif/blink_twice.gif",
     NULL
 };
 // 思考
 static char* EMOJI_THINK_SEQ_PATH[] = {
-    "S:/look_lt_in.gif",
-    "S:/look_lt_do.gif",
-    "S:/look_lt_do.gif",
-    "S:/look_lt_do.gif",
-    "S:/look_lt_out.gif",
+    "S:/gif/look_lt_in.gif",
+    "S:/gif/look_lt_do.gif",
+    "S:/gif/look_lt_do.gif",
+    "S:/gif/look_lt_do.gif",
+    "S:/gif/look_lt_out.gif",
     NULL
 };
 // 感知
 static char* EMOJI_PERCEPT_SEQ_PATH[] = {
-    "S:/look_rt_in.gif",
-    "S:/look_rt_do.gif",
-    "S:/look_rt_do.gif",
-    "S:/look_rt_do.gif",
-    "S:/look_rt_out.gif",
+    "S:/gif/look_rt_in.gif",
+    "S:/gif/look_rt_do.gif",
+    "S:/gif/look_rt_do.gif",
+    "S:/gif/look_rt_do.gif",
+    "S:/gif/look_rt_out.gif",
     NULL
 };
 // 恐慌
 static char* EMOJI_PANIC_SEQ_PATH[] = {
-    "S:/panic_in.gif", 
-    "S:/panic_do.gif", 
-    "S:/panic_do.gif", 
-    "S:/panic_do.gif", 
-    "S:/panic_out.gif",
+    "S:/gif/panic_in.gif", 
+    "S:/gif/panic_do.gif", 
+    "S:/gif/panic_do.gif", 
+    "S:/gif/panic_do.gif", 
+    "S:/gif/panic_out.gif",
     NULL
 };
 // 不屑
 static char* EMOJI_DISDAIN_SEQ_PATH[] = {
-    "S:/disdain_in.gif",
-    "S:/disdain_do.gif",
-    "S:/disdain_do.gif",
-    "S:/disdain_do.gif",
-    "S:/disdain_out.gif",
+    "S:/gif/disdain_in.gif",
+    "S:/gif/disdain_do.gif",
+    "S:/gif/disdain_do.gif",
+    "S:/gif/disdain_do.gif",
+    "S:/gif/disdain_out.gif",
     NULL
 };
 // 生气
 static char* EMOJI_ANGRY_SEQ_PATH[] = {
-    "S:/angry_in.gif", 
-    "S:/angry_do.gif", 
-    "S:/angry_do.gif", 
-    "S:/angry_do.gif", 
-    "S:/angry_out.gif",
+    "S:/gif/angry_in.gif", 
+    "S:/gif/angry_do.gif", 
+    "S:/gif/angry_do.gif", 
+    "S:/gif/angry_do.gif", 
+    "S:/gif/angry_out.gif",
     NULL
 };
 // 兴奋
 static char* EMOJI_EXCITE_SEQ_PATH[] = {
-    "S:/excite_in.gif", 
-    "S:/excite_do.gif", 
-    "S:/excite_do.gif", 
-    "S:/excite_do.gif", 
-    "S:/excite_out.gif",
+    "S:/gif/excite_in.gif", 
+    "S:/gif/excite_do.gif", 
+    "S:/gif/excite_do.gif", 
+    "S:/gif/excite_do.gif", 
+    "S:/gif/excite_out.gif",
     NULL
 };
 // 悲伤
 static char* EMOJI_SAD_SEQ_PATH[] = {
-    "S:/sad_in.gif", 
-    "S:/sad_do.gif", 
-    "S:/sad_do.gif", 
-    "S:/sad_do.gif", 
-    "S:/sad_out.gif",
+    "S:/gif/sad_in.gif", 
+    "S:/gif/sad_do.gif", 
+    "S:/gif/sad_do.gif", 
+    "S:/gif/sad_do.gif", 
+    "S:/gif/sad_out.gif",
     NULL
 };
 

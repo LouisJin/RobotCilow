@@ -42,7 +42,6 @@ typedef enum {
 #define EMOJI_BLINK_INTEVEL  10000
 
 //WIFI相关
-#define WIFI_SSID "LitMeng"
-#define WIFI_PASS "12345678"
+#define WIFI_AP_SSID "Robot_Cilow"
 
 #endif

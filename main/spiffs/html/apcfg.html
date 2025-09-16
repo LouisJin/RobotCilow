@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Robot Cilow WiFi配置</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 20px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #4a5568;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #4facfe;
+            font-size: 18px;
+            width: 24px;
+            height: 24px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px 60px 16px 50px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f8fafc;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.2);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #a0aec0;
+            font-size: 24px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .password-toggle:hover {
+            background: #edf2f7;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #718096;
+            font-size: 14px;
+            border-top: 1px solid #edf2f7;
+        }
+
+        .footer a {
+            color: #4facfe;
+            text-decoration: none;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .success {
+            background: #e6fffa;
+            color: #2f855a;
+            border: 1px solid #c6f6d5;
+        }
+
+        .error {
+            background: #fff5f5;
+            color: #c53030;
+            border: 1px solid #fed7d7;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(79, 172, 254, 0.2);
+            border-top: 5px solid #4facfe;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .network-list {
+            margin-top: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            background: white;
+            display: none;
+        }
+
+        .network-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #edf2f7;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .network-item:hover {
+            background: #f8fafc;
+        }
+
+        .network-icons {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .network-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .signal-bars {
+            display: flex;
+            align-items: flex-end;
+            height: 16px;
+            gap: 2px;
+        }
+
+        .signal-bar {
+            width: 4px;
+            background: #ccc;
+            border-radius: 2px;
+        }
+
+        .signal-bar.active {
+            background: #4facfe;
+        }
+
+        .signal-bar-1 { height: 4px; }
+        .signal-bar-2 { height: 8px; }
+        .signal-bar-3 { height: 12px; }
+        .signal-bar-4 { height: 16px; }
+
+        .network-item:last-child {
+            border-bottom: none;
+        }
+
+        .scan-btn {
+            display: block;
+            width: 100%;
+            background: #edf2f7;
+            color: #4a5568;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .scan-btn:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-icon {
+            width: 20px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>Robot Cilow WiFi配置</h1>
+        <p>请配置设备连接到您的WiFi网络</p>
+    </div>
+
+    <div class="content">
+        <div class="form-group">
+            <label for="ssid">选择WiFi网络</label>
+            <button class="scan-btn" id="scan-btn">
+                <svg class="btn-icon" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" />
+                </svg>
+                扫描附近网络
+            </button>
+            <div class="network-list" id="network-list">
+                <!-- 网络列表将通过JS动态生成 -->
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="ssid">WiFi名称 (SSID)</label>
+            <div class="input-with-icon">
+                <div class="input-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12.000,16.286 A2.857,2.857 0 0 1 9.143,13.429 A2.857,2.857 0 0 1 12.000,10.571 A2.857,2.857 0 0 1 14.857,13.429 A2.857,2.857 0 0 1 12.000,16.286 M12.000,19.143 C8.057,19.143 4.857,15.943 4.857,12.000 C4.857,8.057 8.057,4.857 12.000,4.857 C15.943,4.857 19.143,8.057 19.143,12.000 C19.143,15.943 15.943,19.143 12.000,19.143 M12.000,2.000 C6.471,2.000 2.000,6.471 2.000,12.000 C2.000,17.529 6.471,22.000 12.000,22.000 C17.529,22.000 22.000,17.529 22.000,12.000 C22.000,6.471 17.529,2.000 12.000,2.000 Z" />
+                    </svg>
+                </div>
+                <input type="text" id="ssid" placeholder="输入您的WiFi名称">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">WiFi密码</label>
+            <div class="input-with-icon">
+                <div class="input-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" />
+                    </svg>
+                </div>
+                <input type="password" id="password" placeholder="输入您的WiFi密码">
+                <button class="password-toggle" id="toggle-password">
+                    <svg viewBox="0 0 24 24" width="24" height="24">
+                        <path fill="currentColor" d="M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M12,4.5C17,4.5 21.27,7.61 23,12C21.27,16.39 17,19.5 12,19.5C7,19.5 2.73,16.39 1,12C2.73,7.61 7,4.5 12,4.5M3.18,12C4.83,15.36 8.24,17.5 12,17.5C15.76,17.5 19.17,15.36 20.82,12C19.17,8.64 15.76,6.5 12,6.5C8.24,6.5 4.83,8.64 3.18,12Z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <button class="btn" id="connect-btn">
+            连接网络
+        </button>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>正在连接网络，请稍候...</p>
+        </div>
+
+        <div class="message success" id="success-message">
+            <svg viewBox="0 0 24 24" width="20" height="20" style="margin-right: 8px;">
+                <path fill="currentColor" d="M12,2C6.5,2 2,6.5 2,12C2,17.5 6.5,22 12,22C17.5,22 22,17.5 22,12C22,6.5 17.5,2 12,2M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M16.59,7.58L10,14.17L7.41,11.59L6,13L10,17L18,9L16.59,7.58Z" />
+            </svg>
+        </div>
+
+        <div class="message error" id="error-message">
+            <svg viewBox="0 0 24 24" width="20" height="20" style="margin-right: 8px;">
+                <path fill="currentColor" d="M13,13H11V7H13M13,17H11V15H13M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
+            </svg>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>Robot Cilow WiFi配置工具 | 版本 1.0</p>
+        <p>© 2025 武汉道云星辰信息技术有限公司</p>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // 扫描网络按钮
+        const scanBtn = document.getElementById('scan-btn');
+        const networkList = document.getElementById('network-list');
+        function press_scan_btn(press) {
+            if(press) {
+                scanBtn.innerHTML = `
+                    <svg class="btn-icon" viewBox="0 0 24 24" style="animation: spin 1s linear infinite;">
+                        <path fill="currentColor" d="M12,4V2A10,10 0 0,0 2,12H4A8,8 0 0,1 12,4Z" />
+                    </svg>
+                    扫描中...
+                `;
+            }else {
+                scanBtn.innerHTML = `
+                        <svg class="btn-icon" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M12,16A2,2 0 0,1 14,18A2,2 0 0,1 12,20A2,2 0 0,1 10,18A2,2 0 0,1 12,16M12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12A2,2 0 0,1 12,10M12,4A2,2 0 0,1 14,6A2,2 0 0,1 12,8A2,2 0 0,1 10,6A2,2 0 0,1 12,4Z" />
+                        </svg>
+                        重新扫描网络
+                    `;
+            }
+        }
+        function parse_rssi_2_sign(rssi) {
+            if (rssi >= -50)
+                return 4;
+            else if (rssi >= -70)
+                return 3;
+            else if (rssi >= -85)
+                return 2;
+            else
+                return 1;
+        }
+
+        const ws_url = "ws://192.168.8.1/ws";
+        let ws = new WebSocket(ws_url);
+        function scan_network() {
+            ws.onopen = function() {
+                console.log("WebSocket connection established.");
+                press_scan_btn(true);
+                let scanMsg = {"event": "scan", "data": "start"}
+                ws.send(JSON.stringify(scanMsg));
+            }
+            ws.onmessage = function(event) {
+                console.log("Received message: " + event.data);
+                let msg = JSON.parse(event.data);
+                if( msg.event === "connect_ret") {
+                    if(msg.ret) {
+                        showSuccess('连接成功！');
+                    }else {
+                        showError('连接失败，请检查密码或网络信号');
+                    }
+                    connectBtn.disabled = false;
+                    loading.style.display = 'none';
+                } else if( msg.event === "scan_ret") {
+                    if(msg.ret) {
+                        renderNetworks(msg.list);
+                    }
+                    press_scan_btn(false);
+                }
+            }
+            ws.onclose = function() {
+                console.log("WebSocket connection closed.");
+                press_scan_btn(false);
+            }
+        }
+        scan_network();
+
+        // 密码显示/隐藏切换
+        const passwordInput = document.getElementById('password');
+        const togglePassword = document.getElementById('toggle-password');
+        const eyeIcon = togglePassword.querySelector('svg');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            // 更新图标
+            if (type === 'text') {
+                eyeIcon.innerHTML = '<path fill="currentColor" d="M11.83,9L15,12.16C15,12.11 15,12.05 15,12A3,3 0 0,0 12,9C11.94,9 11.89,9 11.83,9M7.53,9.8L9.08,11.35C9.03,11.56 9,11.77 9,12A3,3 0 0,0 12,15C12.22,15 12.44,14.97 12.65,14.92L14.2,16.47C13.53,16.8 12.79,17 12,17A5,5 0 0,1 7,12C7,11.21 7.2,10.47 7.53,9.8M2,4.27L4.28,6.55L4.73,7C3.08,8.3 1.78,10 1,12C2.73,16.39 7,19.5 12,19.5C13.55,19.5 15.03,19.2 16.38,18.66L16.81,19.08L19.73,22L21,20.73L3.27,3L2,4.27Z" />';
+            } else {
+                eyeIcon.innerHTML = '<path fill="currentColor" d="M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M12,4.5C17,4.5 21.27,7.61 23,12C21.27,16.39 17,19.5 12,19.5C7,19.5 2.73,16.39 1,12C2.73,7.61 7,4.5 12,4.5M3.18,12C4.83,15.36 8.24,17.5 12,17.5C15.76,17.5 19.17,15.36 20.82,12C19.17,8.64 15.76,6.5 12,6.5C8.24,6.5 4.83,8.64 3.18,12Z" />';
+            }
+        });
+
+        scanBtn.addEventListener('click', function() {
+            press_scan_btn(true);
+            let scanMsg = {"event": "scan", "data": "start"}
+            ws.send(JSON.stringify(scanMsg));
+        });
+
+        // 渲染网络列表（左侧信号强度，右侧加密状态）
+        function renderNetworks(networks) {
+            networkList.innerHTML = '';
+            networkList.style.display = 'block';
+
+            networks.forEach(network => {
+                const item = document.createElement('div');
+                item.className = 'network-item';
+
+                // 左侧：网络名称
+                const ssidSpan = document.createElement('span');
+                ssidSpan.textContent = network.ssid;
+                ssidSpan.style.flexGrow = '1';
+                ssidSpan.style.marginRight = '10px';
+
+                // 右侧：信号强度和加密状态
+                const iconsContainer = document.createElement('div');
+                iconsContainer.className = 'network-icons';
+
+                // 信号强度图标（4格条状）
+                const signalBars = document.createElement('div');
+                signalBars.className = 'signal-bars';
+
+                // 创建4个信号条
+                for (let i = 1; i <= 4; i++) {
+                    const bar = document.createElement('div');
+                    bar.className = `signal-bar signal-bar-${i}`;
+                    if (i <= parse_rssi_2_sign(network.rssi)) {
+                        bar.classList.add('active');
+                    }
+                    signalBars.appendChild(bar);
+                }
+
+                // 加密状态图标
+                const lockIcon = document.createElement('div');
+                lockIcon.className = 'network-icon';
+                lockIcon.innerHTML = network.encrypted ?
+                    '<svg viewBox="0 0 24 24" width="20" height="20"><path fill="#4facfe" d="M12,17A2,2 0 0,0 14,15C14,13.89 13.1,13 12,13A2,2 0 0,0 10,15A2,2 0 0,0 12,17M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10C4,8.89 4.9,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z" /></svg>' :
+                    '';
+
+                iconsContainer.appendChild(signalBars);
+                iconsContainer.appendChild(lockIcon);
+
+                item.appendChild(ssidSpan);
+                item.appendChild(iconsContainer);
+
+                item.addEventListener('click', function() {
+                    document.getElementById('ssid').value = network.ssid;
+                    networkList.style.display = 'none';
+                    passwordInput.focus();
+                });
+
+                networkList.appendChild(item);
+            });
+        }
+
+        // 连接按钮事件
+        const connectBtn = document.getElementById('connect-btn');
+        const loading = document.getElementById('loading');
+        const successMessage = document.getElementById('success-message');
+        const errorMessage = document.getElementById('error-message');
+
+        connectBtn.addEventListener('click', function() {
+            const ssid = document.getElementById('ssid').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!ssid) {
+                showError('请输入WiFi名称');
+                return;
+            }
+
+            // 显示加载状态
+            connectBtn.disabled = true;
+            loading.style.display = 'block';
+            hideMessages();
+            // 发送连接信息
+            let connMsg = {"event": "connect", "data": {"ssid": ssid, "pass": password}};
+            ws.send(JSON.stringify(connMsg));
+        });
+
+        // 显示成功消息
+        function showSuccess(message) {
+            successMessage.innerHTML = message;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+
+        // 显示错误消息
+        function showError(message) {
+            errorMessage.innerHTML = message;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+        }
+
+        // 隐藏所有消息
+        function hideMessages() {
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+        }
+    });
+</script>
+</body>
+</html>

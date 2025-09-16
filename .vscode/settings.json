@@ -52,7 +52,21 @@
     "gifdec.h": "c",
     "lv_fs.h": "c",
     "ledc.h": "c",
-    "compare": "cpp"
+    "compare": "cpp",
+    "ip4.h": "c",
+    "ip4_addr.h": "c",
+    "def.h": "c",
+    "pbuf.h": "c",
+    "d_wifi.h": "c",
+    "semphr.h": "c",
+    "http.h": "c",
+    "esp_http_server.h": "c",
+    "complex": "c",
+    "array": "c",
+    "string": "c",
+    "string_view": "c",
+    "span": "c",
+    "sockets.h": "c"
   },
   "idf.flashType": "UART"
 }

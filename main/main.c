@@ -5,6 +5,7 @@
 #include "esp_spiffs.h"
 #include "esp_sleep.h"
 #include "lvgl_api.h"
+#include "http_api.h"
 #include "d_lcd.h"
 #include "d_servo.h"
 #include "d_wifi.h"
@@ -49,17 +50,16 @@ void app_main(void) {
     nvs_init();
     // 初始化spiffs
     spiffs_init();
-    // 初始化wifi
-    wifi_init_sta();
+    // 初始化http
+    http_ap_init();
     // 初始化显示相关
     lv_port_disp_init();
     // 初始化舵机
-    servo_init();
+    // servo_init();
     // 初始化表情
-    emoji_init();
-    // emoji();
-    // emoji_play(EMOTE_EXCITE);
-    set_servo_angle(0);
+    // emoji_init();
+
+    // set_servo_angle(0);
 
     ESP_LOGI(TAG, "Robot Cilow started successfully");
 
