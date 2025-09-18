@@ -44,4 +44,11 @@ typedef enum {
 //WIFI相关
 #define WIFI_AP_SSID "Robot_Cilow"
 
+// speak相关
+//采样率
+#define SPK_SAMPLE_RATE     24000
+#define SPK_PIN_LRC   GPIO_NUM_6
+#define SPK_PIN_BCLK  GPIO_NUM_5
+#define SPK_PIN_DIN   GPIO_NUM_4
+
 #endif

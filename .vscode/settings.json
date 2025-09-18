@@ -66,7 +66,13 @@
     "string": "c",
     "string_view": "c",
     "span": "c",
-    "sockets.h": "c"
+    "sockets.h": "c",
+    "i2s_std.h": "c",
+    "i2s_common.h": "c",
+    "audio_api.h": "c",
+    "d_speak.h": "c",
+    "i2s_types_legacy.h": "c",
+    "initializer_list": "c"
   },
   "idf.flashType": "UART"
 }

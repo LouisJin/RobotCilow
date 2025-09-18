@@ -6,6 +6,8 @@
 #include "freertos/task.h"
 #include "cJSON.h"
 
+#include "audio_api.h"
+
 static const char *TAG = "http_api";
 
 #define HTTP_AP_CFG_PATH   "/spiffs/html/apcfg.html"
@@ -137,14 +139,10 @@ esp_err_t ws_handler(httpd_req_t *req)
           free(buf);
           return ret;
       }
-      ESP_LOGI(TAG, "Got packet with message: %s", ws_pkt.payload);
   }
   ESP_LOGI(TAG, "frame len is %d", ws_pkt.len);
-  if (ws_pkt.type == HTTPD_WS_TYPE_TEXT)
-  {
-      handle_ws_receive(ws_pkt.payload, ws_pkt.len, ws_pkt.type);
-      free(buf);
-  }
+  handle_ws_receive(ws_pkt.payload, ws_pkt.len, ws_pkt.type);
+  free(buf);
   return ESP_OK;
 }
 
@@ -180,37 +178,43 @@ static void wifi_scan_finish_handle(uint16_t ap_num, wifi_ap_record_t *ap_record
  * 处理接收到的ws数据
  */
 void handle_ws_receive(uint8_t* payload, int len, httpd_ws_type_t type) {
-  cJSON* root = cJSON_Parse((char*)payload);
-  if(root){ 
-    cJSON* event_js = cJSON_GetObjectItem(root,"event");
-    char* event = cJSON_GetStringValue(event_js);
-    if(strcmp(event, "scan") == 0){
-      cJSON* data_js = cJSON_GetObjectItem(root,"data");
-      char* data = cJSON_GetStringValue(data_js);
-      if(strcmp(data, "start") == 0){
-        // 如果扫描失败返回错误码
-        if(wifi_scan(wifi_scan_finish_handle) == ESP_FAIL){
-          cJSON* root_ret = cJSON_CreateObject();
-          cJSON_AddStringToObject(root_ret,"event", "scan_ret");
-          cJSON_AddBoolToObject(root_ret,"ret", false);
-          char* data_ret = cJSON_Print(root_ret);
-          ESP_LOGI(TAG,"WS send:%s",data_ret);
-          http_ws_send((uint8_t*)data_ret, strlen(data_ret));
-          cJSON_free(data_ret);
-          cJSON_Delete(root_ret);
+  // 处理文本数据
+  if(type == HTTPD_WS_TYPE_TEXT){
+    ESP_LOGI(TAG, "Got packet with message: %s", payload);
+    cJSON* root = cJSON_Parse((char*)payload);
+    if(root){ 
+      cJSON* event_js = cJSON_GetObjectItem(root,"event");
+      char* event = cJSON_GetStringValue(event_js);
+      if(strcmp(event, "scan") == 0){
+        cJSON* data_js = cJSON_GetObjectItem(root,"data");
+        char* data = cJSON_GetStringValue(data_js);
+        if(strcmp(data, "start") == 0){
+          // 如果扫描失败返回错误码
+          if(wifi_scan(wifi_scan_finish_handle) == ESP_FAIL){
+            cJSON* root_ret = cJSON_CreateObject();
+            cJSON_AddStringToObject(root_ret,"event", "scan_ret");
+            cJSON_AddBoolToObject(root_ret,"ret", false);
+            char* data_ret = cJSON_Print(root_ret);
+            ESP_LOGI(TAG,"WS send:%s",data_ret);
+            http_ws_send((uint8_t*)data_ret, strlen(data_ret));
+            cJSON_free(data_ret);
+            cJSON_Delete(root_ret);
+          }
         }
+      }else if(strcmp(event, "connect") == 0){
+        cJSON* data_js = cJSON_GetObjectItem(root,"data");
+        cJSON* ssid_js = cJSON_GetObjectItem(data_js,"ssid");
+        char* ssid = cJSON_GetStringValue(ssid_js);
+        cJSON* pass_js = cJSON_GetObjectItem(data_js,"pass");
+        char* pass = cJSON_GetStringValue(pass_js);
+        wifi_connect_sta(ssid, pass);
       }
-    }else if(strcmp(event, "connect") == 0){
-      cJSON* data_js = cJSON_GetObjectItem(root,"data");
-      cJSON* ssid_js = cJSON_GetObjectItem(data_js,"ssid");
-      char* ssid = cJSON_GetStringValue(ssid_js);
-      cJSON* pass_js = cJSON_GetObjectItem(data_js,"pass");
-      char* pass = cJSON_GetStringValue(pass_js);
-      wifi_connect_sta(ssid, pass);
+      cJSON_Delete(root);
+    }else{
+      ESP_LOGE(TAG, "cJSON_Parse failed");
     }
-    cJSON_Delete(root);
-  }else{
-    ESP_LOGE(TAG, "cJSON_Parse failed");
+  }else if (type == HTTPD_WS_TYPE_BINARY) {
+    audio_play_wb(payload, len);
   }
 }
 
@@ -282,10 +286,9 @@ void ap_status_callback(WIFI_AP_STATUS status)
  */
 void sta_status_callback(WIFI_STA_STATUS status) {
   switch (status) {
-    // 获取到sta ip，立刻关闭http服务器、dns服务器,重启为sta模式
+    // 获取到sta ip，立刻关闭dns服务器,重启为sta模式
     case WIFI_STA_CONNECTED:
       dns_server_stop();
-      http_server_stop();
       break;
     // 获取不到，可能wifi密码错误,提示用户
     case WIFI_STA_DISCONNECTED:
@@ -317,6 +320,16 @@ esp_err_t http_ap_init(void)
  */
 void only_sta_status_callback(WIFI_STA_STATUS status) {
     if (status == WIFI_STA_CONNECTED) {
+      // 启动websocket服务
+      http_server_start();
+      httpd_uri_t uri_ws = 
+      {
+          .uri = "/ws",
+          .method = HTTP_GET,
+          .handler = ws_handler,
+          .is_websocket = true
+      };
+      httpd_register_uri_handler(http_server, &uri_ws);
       ESP_LOGI(TAG,"http init finished");
     } else if (status == WIFI_STA_DISCONNECTED) {
       // 当连不上网，则启动ap模式辅助联网

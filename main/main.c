@@ -6,9 +6,11 @@
 #include "esp_sleep.h"
 #include "lvgl_api.h"
 #include "http_api.h"
+#include "audio_api.h"
 #include "d_lcd.h"
 #include "d_servo.h"
 #include "d_wifi.h"
+#include "d_speak.h"
 #include "nvs_flash.h"
 
 static const char *TAG = "APP";
@@ -57,9 +59,12 @@ void app_main(void) {
     // 初始化舵机
     // servo_init();
     // 初始化表情
-    // emoji_init();
-
+    emoji_init();
+    // 设置舵机角度
     // set_servo_angle(0);
+    // 扬声器初始化
+    speak_init();
+    // audio_play_local("/spiffs/audio/output.pcm");
 
     ESP_LOGI(TAG, "Robot Cilow started successfully");
 
